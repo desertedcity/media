@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>实现拍照功能</title>
+</head>
+<body>
+    <video id="myVideo" width="400" height="300" autoplay></video>
+    <img src="" alt="" id="img">
+    <canvas id="canvas" width="400" height="300" style="display:none;"></canvas>
+    <script>
+        navigator.getUserMedia=navigator.getUserMedia||navigator.webkitGetUserMedia||navigator.mozGetUserMedia;
+        window.URL=window.URL||window.webkitURL;
+
+        var video=document.getElementById("myVideo");
+        video.addEventListener("click",snapshot,false);
+        //        addEventListener(event,callback ,false)第三参数为false时表示在冒泡阶段执行
+        var canvas=document.getElementById("canvas");
+        var ctx=canvas.getContext("2d");
+        var localMediaStream=null;
+        navigator.getUserMedia({video:true,audio:false},
+                function (stream) {
+                    video.src=window.URL.createObjectURL(stream);
+                    localMediaStream=stream;
+                },
+                function(err){
+                    console.log(err);
+                }
+        );
+        function snapshot(){
+            if(localMediaStream){
+                ctx.drawImage(video,0,0);
+                document.getElementById("img").src=canvas.toDataURL("image/png");
+            }
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>获取对视频输入或音频输入设备的访问权限</title>
+</head>
+<body>
+    <video id="myVideo" width="400" height="300" autoplay></video>
+    <!--若不设置autoplay属性video将会停留在所获取的第一帧画面处-->
+    <script>
+        function hasGetUserMedia(){
+            return !!(navigator.getUserMedia||navigator.webkitGetUserMedia||navigator.mozGetUserMedia);
+        }
+        if(hasGetUserMedia()){
+            alert("支持navigator.getUserMedia方法");
+        }else{
+            alert("不支持navigator.getUserMedia方法");
+        }
+
+        navigator.getUserMedia=navigator.getUserMedia||navigator.webkitGetUserMedia||navigator.mozGetUserMedia;
+        window.URL=window.URL||window.webkitURL;
+
+        var video=document.getElementById("myVideo");
+        navigator.getUserMedia({video:true,audio:false},    //允许获取视频但不允许获取音频
+                function (stream){          //同步媒体数据流
+                    video.src=window.URL.createObjectURL(stream);
+                },
+                function (err){         //发生错误是返回错误信息
+                    console.log(err);
+                }
+        );
+    </script>
+</body>
+</html>
